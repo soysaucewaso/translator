@@ -4,19 +4,30 @@ import 'package:flutter/material.dart';
 
 import 'StringBuffer.dart';
 import 'httprequests.dart';
+///handle most of the flutter frontend
+///make an app calling an API to translate text between languages
 
+///main function just runs the split screen app
 void main() => runApp(MaterialApp(home: SplitScreenApp()));
+
+///padding surrounding the buttons of the split screen app
 const double padding = 10;
+///height for text holder and text shower(how big the box is)
 const double textHeight = 150;
+///can be manipulated to control the number of lines in text holder, leave null
 const int? lines = null;
+///color of all the text boxes
 const boxbgcolor = Color.fromARGB(240, 255, 255, 255);
+///default text style
 const defaultStyle = TextStyle(
   color: Colors.black,
   fontSize: 18,
   fontFamily: "Open Sans",
   fontWeight: FontWeight.w300,
 );
-
+///1 regular and 1 upside down screen
+///each with a dropdown button to control language
+///top gets text from user, bottom displays translated text
 class SplitScreenApp extends StatefulWidget {
   const SplitScreenApp({super.key});
 
@@ -25,7 +36,13 @@ class SplitScreenApp extends StatefulWidget {
 }
 
 class _SplitScreenAppState extends State<SplitScreenApp> {
+  ///SBV is a StringBuffer(for mutability) with value comparison
+  ///used for the dropdownbutton
+  ///
+  ///this will cause an error if the dropdownvalues array
+  ///doesn't contain an instance of the inital values
   SBV srcLang = SBV("Auto"), destLang = SBV("English");
+  ///allows writing and reading of text in TextHolder and Shower
   final TextEditingController _srcController = TextEditingController(),
       _destController = TextEditingController();
 
@@ -175,8 +192,10 @@ class _SplitScreenAppState extends State<SplitScreenApp> {
     );
   }
 }
+///Shows translated text using a textfield
 
 class TextShower extends StatelessWidget {
+  ///takes controller so text can be manipulated from parent class
   final TextEditingController controller;
 
   const TextShower({super.key, required this.controller});
@@ -207,8 +226,10 @@ class TextShower extends StatelessWidget {
     );
   }
 }
-
+///lets user change text to be translated
 class TextHolder extends StatefulWidget {
+  ///callback lets parent class know when controller data is manipulated
+  ///so parent can try to translate text
   final Function stringCallback;
   final TextEditingController controller;
 
@@ -254,13 +275,17 @@ class _TextHolderState extends State<TextHolder> {
     );
   }
 }
-
+///used twice, allows choice between many different languages
 class ScrollableDropdownButtonApp extends StatefulWidget {
+  ///screen is an enum to let you know if its the right side up or upside down half
   final Screen t;
+  ///callback for when language is changed
   final Function langCallback;
 
   //sbv is a string builder
+  ///buffer is the currently selected element
   final SBV buffer;
+  ///controller is currently not used, but would be used for audio
   final TextEditingController controller;
 
   const ScrollableDropdownButtonApp(
@@ -419,7 +444,8 @@ class _ScrollableDropdownButtonAppState
     ].map((e) => SBV(e)).toList();
     if (t == Screen.bottom) dropdownValues.insert(0, SBV("Auto"));
   }
-
+  ///checks with languages in dropdownValues are supported by API
+  ///prints copyable list of working languages
   void checkWhichLanguagesWork() async {
     List<String> d = [];
     for (var element in dropdownValues) {
@@ -487,7 +513,7 @@ class _ScrollableDropdownButtonAppState
     );
   }
 }
-
+///widget to add a pretty border to boxes
 class WrapperWidget extends StatelessWidget {
   final Widget w;
 

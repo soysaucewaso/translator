@@ -74,6 +74,11 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>translate text by making a post request to API</p>
+<p>if theres an error but the response can still be decoded,
+makes a snackbar with error information</p>
+</section>
 
 
     
@@ -95,7 +100,20 @@
     }
   };
   var body = json.encode(jsonData);
-  var response = await http.post(url, body: body);
+  http.Response response;
+  try {
+    response = await http.post(url, body: body);
+  }on Exception catch(e){
+    final snackbar = SnackBar(content: Text(&quot;Unable to access server&quot;));
+    try {
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    }
+    finally {
+      if (kDebugMode) print(&quot;Unable to access server, ${e.toString()}&quot;);
+
+    }
+    return &quot;&quot;;
+  }
   Map map = json.decode(response.body);
   if (map.containsKey(&quot;data&quot;) &amp;&amp; response.statusCode == 200) {
     return map[&quot;data&quot;];

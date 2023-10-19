@@ -4,8 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-
+///collection of static methods to make http requests
 class Http {
+  ///translate text by making a post request to API
+  ///
+  ///if theres an error but the response can still be decoded,
+  ///makes a snackbar with error information
   static Future<String> translationRequest(BuildContext context, String str,
       String srclang, String destlang) async {
     if (kDebugMode) {
@@ -22,7 +26,20 @@ class Http {
       }
     };
     var body = json.encode(jsonData);
-    var response = await http.post(url, body: body);
+    http.Response response;
+    try {
+      response = await http.post(url, body: body);
+    }on Exception catch(e){
+      final snackbar = SnackBar(content: Text("Unable to access server"));
+      try {
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      }
+      finally {
+        if (kDebugMode) print("Unable to access server, ${e.toString()}");
+
+      }
+      return "";
+    }
     Map map = json.decode(response.body);
     if (map.containsKey("data") && response.statusCode == 200) {
       return map["data"];
@@ -39,7 +56,7 @@ class Http {
       return "";
     }
   }
-
+  ///not yet implemented
   static Future<String> transcriptionRequest(String str, String lang) {
     throw UnimplementedError();
   }

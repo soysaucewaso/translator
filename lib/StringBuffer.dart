@@ -1,3 +1,4 @@
+///Mutable String with value comparison
 class SBV implements StringSink{
   //STRING Buffer that compares by value instead of reference
   late final StringBuffer buffer;
@@ -16,34 +17,32 @@ class SBV implements StringSink{
   }
   void clear(){
     buffer.clear();
-  }void rewrite(String s){
+  }
+  ///replace current value with s
+  void rewrite(String s){
     clear();
-    buffer.write(s);
+    write(s);
   }
   @override
   int get hashCode => buffer.toString().hashCode;
 
   @override
   void write(Object? object) {
-    // TODO: implement write
     buffer.write(object);
   }
 
   @override
   void writeAll(Iterable objects, [String separator = ""]) {
-    // TODO: implement writeAll
     buffer.writeAll(objects,separator);
   }
 
   @override
   void writeCharCode(int charCode) {
-    // TODO: implement writeCharCode
     buffer.writeCharCode(charCode);
   }
 
   @override
   void writeln([Object? object = ""]) {
-    // TODO: implement writeln
     buffer.writeln(object);
   }
 }
